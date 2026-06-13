@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY ./src/package.json ./src/package-lock.json ./
 COPY ./src/ ./src/
-COPY .env .env
+COPY .projectenv .env
 COPY /playwright-docker/ /playwright-docker/
 
 RUN npm ci
