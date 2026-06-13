@@ -1,20 +1,21 @@
 services:
   api:
-    image: golang:1.23
+    image: golang:latest
     working_dir: /app
     volumes:
-      - ./api:/app
+      - ./playwright-docker/api:/app
       - /var/run/docker.sock:/var/run/docker.sock
       - auth:/auth
       - logs:/logs
     command: sh -c "go run main.go"
     ports:
-      - "$(API_PORT):8080"
+      - "${API_PORT}:8080"
     environment:
       - AUTH_DIR=/auth
 
   playwright:
-    build: ./playwright.dockerfile
+    build: 
+      dockerfile: ./playwright-docker/playwright.dockerfile
     volumes:
       - auth:/auth
       - logs:/logs
