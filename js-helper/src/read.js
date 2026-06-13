@@ -7,10 +7,8 @@ const STATE_DIR = process.env.STATE_DIR || "/auth";
 export function listStates() {
     if (!fs.existsSync(STATE_DIR)) return [];
     return fs.readdirSync(STATE_DIR)
-        .filter(f => f.endsWith(".json")).forEach(f => {
-            const id = path.basename(f, ".json");
-            return id;
-        });
+        .filter(f => f.endsWith(".json"))
+        .map(f => path.basename(f, ".json"));
 }
 
 // Returns the state object for the given UUID, or throws an error if not found.
