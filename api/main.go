@@ -102,6 +102,25 @@ func uploadState(c *gin.Context) {
 	})
 }
 
+// GET /states
+func listStates(c *gin.Context) {
+	files, err := os.ReadDir("/auth")
+	if err != nil {
+		logAPI(fmt.Sprintf("Failed to read /auth directory: %v", err))
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Unable to read the auth directory"})
+		return
+	}
+
+	var states []string
+	for _, file := range files {
+		if !file.IsDir() && file.Type().IsRegular() && file.Name()[len(file.Name())-5:] == ".json" {
+			states = append(states, file.Name()[:len(file.Name())-5]) // remove .json extension
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{"states": states})
+}
+
 // GET /status
 func status(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": "ok"})
@@ -170,6 +189,7 @@ func main() {
 	r.GET("/status", status)
 
 	// auth state endpoints
+	r.GET("/states", listStates)
 	r.POST("/upload", uploadState)
 	r.POST("/remove/:id", removeState)
 
@@ -183,4 +203,3 @@ func main() {
 
 	r.Run(":8080")
 }
-

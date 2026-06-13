@@ -96,7 +96,9 @@ Attempts to delete:
 ```
 
 ---
-
+## `GET /states`
+Returns a list of all saved auth state files.
+---
 ## `GET /logs/api`
 
 Returns the contents of the API log file as plain text.
